@@ -2,6 +2,7 @@
 #![cfg_attr(feature = "cargo-clippy",
             allow(const_static_lifetime, doc_markdown, large_enum_variant, match_bool,
                   redundant_closure))]
+#![cfg_attr(feature = "unstable", feature(proc_macro))]
 
 extern crate proc_macro2;
 extern crate proc_macro;
@@ -113,7 +114,11 @@ mod gen {
 
     #[cfg(feature = "fold")]
     pub mod fold;
+
+    #[cfg(feature = "unstable")]
+    pub mod spanned;
 }
+
 pub use gen::*;
 
 ////////////////////////////////////////////////////////////////////////////////

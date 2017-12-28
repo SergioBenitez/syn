@@ -17,6 +17,7 @@ required-features = ["extra-traits", "parsing", "printing", "full"]
 
 [features]
 default = ["parsing", "printing", "clone-impls"]
+unstable = ["visit", "proc-macro2/unstable"]
 full = []
 parsing = ["quote"]
 printing = ["quote"]
@@ -36,3 +37,6 @@ unicode-xid = "0.1"
 [dev-dependencies]
 rayon = "0.9"
 walkdir = "1.0.1"
+
+[patch.crates-io]
+proc-macro2 = { path = "../proc-macro2" }
