@@ -1,46 +1,28 @@
 #![feature(proc_macro)]
 
+#[macro_use]
 extern crate syn;
 extern crate proc_macro;
 
 use proc_macro::{TokenStream, Diagnostic};
 
-use syn::*;
+use syn::ExprTuple;
 use syn::spanned::Spanned;
-use syn::synom::{Synom, Cursor, SynomBuffer};
+use syn::synom::Synom;
 
-struct Parser {
-    buffer: Box<SynomBuffer>,
-    cursor: Cursor<'static>
-}
+struct Demo(ExprTuple, ExprTuple);
 
-impl Parser {
-    fn new(tokens: TokenStream) -> Parser {
-        let buffer = Box::new(SynomBuffer::new(tokens.into()));
-        let cursor = unsafe {
-            let buffer: &'static SynomBuffer = ::std::mem::transmute(&*buffer);
-            buffer.begin()
-        };
-
-        Parser {
-            buffer: buffer,
-            cursor: cursor
-        }
-    }
-
-    fn parse<T: Synom>(&mut self) -> Result<T, Diagnostic> {
-        let (cursor, val) = T::parse(self.cursor).map_err(|e| e.into())?;
-        self.cursor = cursor;
-        Ok(val)
-    }
+impl Synom for Demo {
+    named!(parse -> Self, do_parse!(
+        a: syn!(ExprTuple) >>
+        punct!(=) >>
+        b: syn!(ExprTuple) >>
+        (Demo(a, b))
+    ));
 }
 
 fn eval(input: TokenStream) -> Result<TokenStream, Diagnostic> {
-    let mut parser = Parser::new(input);
-
-    let a = parser.parse::<ExprTuple>()?;
-    parser.parse::<token::Eq>()?;
-    let b = parser.parse::<ExprTuple>()?;
+    let Demo(a, b) = syn::parse(input)?;
 
     let (a_len, b_len) = (a.args.len(), b.args.len());
     if a_len != b_len {

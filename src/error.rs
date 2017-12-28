@@ -34,9 +34,9 @@ impl Display for ParseError {
 use proc_macro::{Level, Diagnostic};
 
 #[cfg(feature = "unstable")]
-impl Into<Diagnostic> for ParseError {
-    fn into(self) -> Diagnostic {
-        Diagnostic::new(Level::Error, self.to_string())
+impl From<ParseError> for Diagnostic {
+    fn from(err: ParseError) -> Self {
+        Diagnostic::new(Level::Error, err.to_string())
     }
 }
 
