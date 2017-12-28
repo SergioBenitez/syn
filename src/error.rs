@@ -30,6 +30,16 @@ impl Display for ParseError {
     }
 }
 
+#[cfg(feature = "unstable")]
+use proc_macro::{Level, Diagnostic};
+
+#[cfg(feature = "unstable")]
+impl Into<Diagnostic> for ParseError {
+    fn into(self) -> Diagnostic {
+        Diagnostic::new(Level::Error, self.to_string())
+    }
+}
+
 impl ParseError {
     // For syn use only. Not public API.
     #[doc(hidden)]
