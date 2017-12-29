@@ -45,15 +45,6 @@ impl Spanned for ::Abi {
 }
 
 
-impl Spanned for ::AbiKind {
-    fn try_span(&self) -> Option<::proc_macro::Span> {
-        let mut visitor = SpanVisitor::default();
-        visitor.visit_abi_kind(self);
-        visitor.span
-    }
-}
-
-
 impl Spanned for ::AngleBracketedGenericArguments {
     fn try_span(&self) -> Option<::proc_macro::Span> {
         let mut visitor = SpanVisitor::default();
@@ -135,15 +126,6 @@ impl Spanned for ::BareFnArgName {
 }
 
 
-impl Spanned for ::BareFnType {
-    fn try_span(&self) -> Option<::proc_macro::Span> {
-        let mut visitor = SpanVisitor::default();
-        visitor.visit_bare_fn_type(self);
-        visitor.span
-    }
-}
-
-
 impl Spanned for ::BinOp {
     fn try_span(&self) -> Option<::proc_macro::Span> {
         let mut visitor = SpanVisitor::default();
@@ -152,11 +134,11 @@ impl Spanned for ::BinOp {
     }
 }
 
-# [ cfg ( feature = "full" ) ]
-impl Spanned for ::BindingMode {
+
+impl Spanned for ::Binding {
     fn try_span(&self) -> Option<::proc_macro::Span> {
         let mut visitor = SpanVisitor::default();
-        visitor.visit_binding_mode(self);
+        visitor.visit_binding(self);
         visitor.span
     }
 }
@@ -206,38 +188,11 @@ impl Spanned for ::BoundLifetimes {
     }
 }
 
-# [ cfg ( feature = "full" ) ]
-impl Spanned for ::CaptureBy {
-    fn try_span(&self) -> Option<::proc_macro::Span> {
-        let mut visitor = SpanVisitor::default();
-        visitor.visit_capture_by(self);
-        visitor.span
-    }
-}
-
 
 impl Spanned for ::ConstParam {
     fn try_span(&self) -> Option<::proc_macro::Span> {
         let mut visitor = SpanVisitor::default();
         visitor.visit_const_param(self);
-        visitor.span
-    }
-}
-
-# [ cfg ( feature = "full" ) ]
-impl Spanned for ::Constness {
-    fn try_span(&self) -> Option<::proc_macro::Span> {
-        let mut visitor = SpanVisitor::default();
-        visitor.visit_constness(self);
-        visitor.span
-    }
-}
-
-# [ cfg ( feature = "full" ) ]
-impl Spanned for ::Defaultness {
-    fn try_span(&self) -> Option<::proc_macro::Span> {
-        let mut visitor = SpanVisitor::default();
-        visitor.visit_defaultness(self);
         visitor.span
     }
 }
@@ -395,7 +350,7 @@ impl Spanned for ::ExprForLoop {
     }
 }
 
-
+# [ cfg ( feature = "full" ) ]
 impl Spanned for ::ExprGroup {
     fn try_span(&self) -> Option<::proc_macro::Span> {
         let mut visitor = SpanVisitor::default();
@@ -441,10 +396,10 @@ impl Spanned for ::ExprIndex {
 }
 
 
-impl Spanned for ::ExprKind {
+impl Spanned for ::ExprLit {
     fn try_span(&self) -> Option<::proc_macro::Span> {
         let mut visitor = SpanVisitor::default();
-        visitor.visit_expr_kind(self);
+        visitor.visit_expr_lit(self);
         visitor.span
     }
 }
@@ -454,6 +409,15 @@ impl Spanned for ::ExprLoop {
     fn try_span(&self) -> Option<::proc_macro::Span> {
         let mut visitor = SpanVisitor::default();
         visitor.visit_expr_loop(self);
+        visitor.span
+    }
+}
+
+# [ cfg ( feature = "full" ) ]
+impl Spanned for ::ExprMacro {
+    fn try_span(&self) -> Option<::proc_macro::Span> {
+        let mut visitor = SpanVisitor::default();
+        visitor.visit_expr_macro(self);
         visitor.span
     }
 }
@@ -476,7 +440,7 @@ impl Spanned for ::ExprMethodCall {
     }
 }
 
-
+# [ cfg ( feature = "full" ) ]
 impl Spanned for ::ExprParen {
     fn try_span(&self) -> Option<::proc_macro::Span> {
         let mut visitor = SpanVisitor::default();
@@ -513,10 +477,10 @@ impl Spanned for ::ExprRepeat {
 }
 
 # [ cfg ( feature = "full" ) ]
-impl Spanned for ::ExprRet {
+impl Spanned for ::ExprReturn {
     fn try_span(&self) -> Option<::proc_macro::Span> {
         let mut visitor = SpanVisitor::default();
-        visitor.visit_expr_ret(self);
+        visitor.visit_expr_return(self);
         visitor.span
     }
 }
@@ -548,7 +512,7 @@ impl Spanned for ::ExprTuple {
     }
 }
 
-
+# [ cfg ( feature = "full" ) ]
 impl Spanned for ::ExprType {
     fn try_span(&self) -> Option<::proc_macro::Span> {
         let mut visitor = SpanVisitor::default();
@@ -571,6 +535,15 @@ impl Spanned for ::ExprUnsafe {
     fn try_span(&self) -> Option<::proc_macro::Span> {
         let mut visitor = SpanVisitor::default();
         visitor.visit_expr_unsafe(self);
+        visitor.span
+    }
+}
+
+
+impl Spanned for ::ExprVerbatim {
+    fn try_span(&self) -> Option<::proc_macro::Span> {
+        let mut visitor = SpanVisitor::default();
+        visitor.visit_expr_verbatim(self);
         visitor.span
     }
 }
@@ -692,11 +665,29 @@ impl Spanned for ::ForeignItemType {
     }
 }
 
+# [ cfg ( feature = "full" ) ]
+impl Spanned for ::ForeignItemVerbatim {
+    fn try_span(&self) -> Option<::proc_macro::Span> {
+        let mut visitor = SpanVisitor::default();
+        visitor.visit_foreign_item_verbatim(self);
+        visitor.span
+    }
+}
+
 
 impl Spanned for ::GenericArgument {
     fn try_span(&self) -> Option<::proc_macro::Span> {
         let mut visitor = SpanVisitor::default();
         visitor.visit_generic_argument(self);
+        visitor.span
+    }
+}
+
+# [ cfg ( feature = "full" ) ]
+impl Spanned for ::GenericMethodArgument {
+    fn try_span(&self) -> Option<::proc_macro::Span> {
+        let mut visitor = SpanVisitor::default();
+        visitor.visit_generic_method_argument(self);
         visitor.span
     }
 }
@@ -774,24 +765,15 @@ impl Spanned for ::ImplItemType {
 }
 
 # [ cfg ( feature = "full" ) ]
-impl Spanned for ::ImplPolarity {
+impl Spanned for ::ImplItemVerbatim {
     fn try_span(&self) -> Option<::proc_macro::Span> {
         let mut visitor = SpanVisitor::default();
-        visitor.visit_impl_polarity(self);
+        visitor.visit_impl_item_verbatim(self);
         visitor.span
     }
 }
 
-# [ cfg ( feature = "full" ) ]
-impl Spanned for ::InPlaceKind {
-    fn try_span(&self) -> Option<::proc_macro::Span> {
-        let mut visitor = SpanVisitor::default();
-        visitor.visit_in_place_kind(self);
-        visitor.span
-    }
-}
 
-# [ cfg ( feature = "full" ) ]
 impl Spanned for ::Index {
     fn try_span(&self) -> Option<::proc_macro::Span> {
         let mut visitor = SpanVisitor::default();
@@ -814,15 +796,6 @@ impl Spanned for ::ItemConst {
     fn try_span(&self) -> Option<::proc_macro::Span> {
         let mut visitor = SpanVisitor::default();
         visitor.visit_item_const(self);
-        visitor.span
-    }
-}
-
-# [ cfg ( feature = "full" ) ]
-impl Spanned for ::ItemDefaultImpl {
-    fn try_span(&self) -> Option<::proc_macro::Span> {
-        let mut visitor = SpanVisitor::default();
-        visitor.visit_item_default_impl(self);
         visitor.span
     }
 }
@@ -953,6 +926,24 @@ impl Spanned for ::ItemUse {
     }
 }
 
+# [ cfg ( feature = "full" ) ]
+impl Spanned for ::ItemVerbatim {
+    fn try_span(&self) -> Option<::proc_macro::Span> {
+        let mut visitor = SpanVisitor::default();
+        visitor.visit_item_verbatim(self);
+        visitor.span
+    }
+}
+
+# [ cfg ( feature = "full" ) ]
+impl Spanned for ::Label {
+    fn try_span(&self) -> Option<::proc_macro::Span> {
+        let mut visitor = SpanVisitor::default();
+        visitor.visit_label(self);
+        visitor.span
+    }
+}
+
 
 impl Spanned for ::Lifetime {
     fn try_span(&self) -> Option<::proc_macro::Span> {
@@ -998,7 +989,7 @@ impl Spanned for ::Macro {
     }
 }
 
-# [ cfg ( feature = "full" ) ]
+
 impl Spanned for ::Member {
     fn try_span(&self) -> Option<::proc_macro::Span> {
         let mut visitor = SpanVisitor::default();
@@ -1043,20 +1034,11 @@ impl Spanned for ::MethodSig {
     }
 }
 
-
-impl Spanned for ::MutType {
+# [ cfg ( feature = "full" ) ]
+impl Spanned for ::MethodTurbofish {
     fn try_span(&self) -> Option<::proc_macro::Span> {
         let mut visitor = SpanVisitor::default();
-        visitor.visit_mut_type(self);
-        visitor.span
-    }
-}
-
-
-impl Spanned for ::Mutability {
-    fn try_span(&self) -> Option<::proc_macro::Span> {
-        let mut visitor = SpanVisitor::default();
-        visitor.visit_mutability(self);
+        visitor.visit_method_turbofish(self);
         visitor.span
     }
 }
@@ -1111,6 +1093,15 @@ impl Spanned for ::PatLit {
     fn try_span(&self) -> Option<::proc_macro::Span> {
         let mut visitor = SpanVisitor::default();
         visitor.visit_pat_lit(self);
+        visitor.span
+    }
+}
+
+# [ cfg ( feature = "full" ) ]
+impl Spanned for ::PatMacro {
+    fn try_span(&self) -> Option<::proc_macro::Span> {
+        let mut visitor = SpanVisitor::default();
+        visitor.visit_pat_macro(self);
         visitor.span
     }
 }
@@ -1174,6 +1165,15 @@ impl Spanned for ::PatTupleStruct {
     fn try_span(&self) -> Option<::proc_macro::Span> {
         let mut visitor = SpanVisitor::default();
         visitor.visit_pat_tuple_struct(self);
+        visitor.span
+    }
+}
+
+# [ cfg ( feature = "full" ) ]
+impl Spanned for ::PatVerbatim {
+    fn try_span(&self) -> Option<::proc_macro::Span> {
+        let mut visitor = SpanVisitor::default();
+        visitor.visit_pat_verbatim(self);
         visitor.span
     }
 }
@@ -1313,6 +1313,15 @@ impl Spanned for ::TraitItemType {
     }
 }
 
+# [ cfg ( feature = "full" ) ]
+impl Spanned for ::TraitItemVerbatim {
+    fn try_span(&self) -> Option<::proc_macro::Span> {
+        let mut visitor = SpanVisitor::default();
+        visitor.visit_trait_item_verbatim(self);
+        visitor.span
+    }
+}
+
 
 impl Spanned for ::Type {
     fn try_span(&self) -> Option<::proc_macro::Span> {
@@ -1341,15 +1350,6 @@ impl Spanned for ::TypeBareFn {
 }
 
 
-impl Spanned for ::TypeBinding {
-    fn try_span(&self) -> Option<::proc_macro::Span> {
-        let mut visitor = SpanVisitor::default();
-        visitor.visit_type_binding(self);
-        visitor.span
-    }
-}
-
-
 impl Spanned for ::TypeGroup {
     fn try_span(&self) -> Option<::proc_macro::Span> {
         let mut visitor = SpanVisitor::default();
@@ -1372,6 +1372,15 @@ impl Spanned for ::TypeInfer {
     fn try_span(&self) -> Option<::proc_macro::Span> {
         let mut visitor = SpanVisitor::default();
         visitor.visit_type_infer(self);
+        visitor.span
+    }
+}
+
+
+impl Spanned for ::TypeMacro {
+    fn try_span(&self) -> Option<::proc_macro::Span> {
+        let mut visitor = SpanVisitor::default();
+        visitor.visit_type_macro(self);
         visitor.span
     }
 }
@@ -1467,19 +1476,19 @@ impl Spanned for ::TypeTuple {
 }
 
 
-impl Spanned for ::UnOp {
+impl Spanned for ::TypeVerbatim {
     fn try_span(&self) -> Option<::proc_macro::Span> {
         let mut visitor = SpanVisitor::default();
-        visitor.visit_un_op(self);
+        visitor.visit_type_verbatim(self);
         visitor.span
     }
 }
 
 
-impl Spanned for ::Unsafety {
+impl Spanned for ::UnOp {
     fn try_span(&self) -> Option<::proc_macro::Span> {
         let mut visitor = SpanVisitor::default();
-        visitor.visit_unsafety(self);
+        visitor.visit_un_op(self);
         visitor.span
     }
 }

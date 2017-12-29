@@ -149,6 +149,10 @@ pub mod parsing {
             punct!(-) => { UnOp::Neg }
         ));
     }
+
+    fn description() -> Option<&'static str> {
+        Some("unary operator: `*`, `!`, or `-`")
+    }
 }
 
 #[cfg(feature = "printing")]

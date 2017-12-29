@@ -171,6 +171,10 @@ pub mod parsing {
             })
         ));
     }
+
+    fn description() -> Option<&'static str> {
+        Some("macro invocation")
+    }
 }
 
 #[cfg(feature = "printing")]

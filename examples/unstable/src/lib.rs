@@ -1,4 +1,4 @@
-#![feature(proc_macro)]
+#![feature(proc_macro, core_intrinsics)]
 
 extern crate syn;
 extern crate proc_macro;
@@ -36,7 +36,14 @@ impl Parser {
 
     fn parse<T: Synom>(&mut self) -> Result<T, Diagnostic> {
         let (cursor, val) = T::parse(self.cursor)
-            .map_err(|e| self.current_span().error(e.to_string()))?;
+            .map_err(|e| {
+                let expected = match T::description() {
+                    Some(desc) => desc,
+                    None => unsafe { ::std::intrinsics::type_name::<T>() }
+                };
+
+                self.current_span().error(format!("{}: expected {}", e, expected))
+            })?;
 
         self.cursor = cursor;
         Ok(val)

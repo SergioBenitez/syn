@@ -403,6 +403,10 @@ pub mod parsing {
                 bracket_token: b,
             }
         ));
+
+        fn description() -> Option<&'static str> {
+            Some("slice type")
+        }
     }
 
     impl Synom for TypeArray {
@@ -422,6 +426,10 @@ pub mod parsing {
                 }
             }
         ));
+
+        fn description() -> Option<&'static str> {
+            Some("array type")
+        }
     }
 
     impl Synom for TypePtr {
@@ -440,6 +448,10 @@ pub mod parsing {
                 elem: Box::new(target),
             })
         ));
+
+        fn description() -> Option<&'static str> {
+            Some("raw pointer type")
+        }
     }
 
     impl Synom for TypeReference {
@@ -456,6 +468,10 @@ pub mod parsing {
                 and_token: amp,
             })
         ));
+
+        fn description() -> Option<&'static str> {
+            Some("reference type")
+        }
     }
 
     impl Synom for TypeBareFn {
@@ -482,6 +498,10 @@ pub mod parsing {
                 inputs: (parens.0).0,
             })
         ));
+
+        fn description() -> Option<&'static str> {
+            Some("`fn` type")
+        }
     }
 
     impl Synom for TypeNever {
@@ -489,6 +509,10 @@ pub mod parsing {
             punct!(!),
             |b| TypeNever { bang_token: b }
         ));
+
+        fn description() -> Option<&'static str> {
+            Some("never type: `!`")
+        }
     }
 
     impl Synom for TypeInfer {
@@ -496,6 +520,10 @@ pub mod parsing {
             punct!(_),
             |u| TypeInfer { underscore_token: u }
         ));
+
+        fn description() -> Option<&'static str> {
+            Some("inferred type: `_`")
+        }
     }
 
     impl Synom for TypeTuple {
@@ -506,6 +534,10 @@ pub mod parsing {
                 paren_token: data.1,
             })
         ));
+
+        fn description() -> Option<&'static str> {
+            Some("tuple type")
+        }
     }
 
     impl Synom for TypeMacro {
@@ -587,6 +619,10 @@ pub mod parsing {
                 output: output,
             })
         ));
+
+        fn description() -> Option<&'static str> {
+            Some("parenthesized generic arguments: `Foo(A, B, ..) -> T`")
+        }
     }
 
     impl Synom for ReturnType {
@@ -599,6 +635,10 @@ pub mod parsing {
             |
             epsilon!() => { |_| ReturnType::Default }
         ));
+
+        fn description() -> Option<&'static str> {
+            Some("return type")
+        }
     }
 
     impl Synom for TypeTraitObject {
@@ -621,6 +661,10 @@ pub mod parsing {
                 bounds: bounds,
             })
         ));
+
+        fn description() -> Option<&'static str> {
+            Some("trait object type")
+        }
     }
 
     impl Synom for TypeImplTrait {
@@ -634,6 +678,10 @@ pub mod parsing {
                 bounds: elem,
             })
         ));
+
+        fn description() -> Option<&'static str> {
+            Some("`impl Trait` type")
+        }
     }
 
     impl Synom for TypeGroup {
@@ -701,6 +749,10 @@ pub mod parsing {
             |
             syn!(ExprBlock) => { |b| GenericArgument::Const(Expr::Block(b).into()) }
         ));
+
+        fn description() -> Option<&'static str> {
+            Some("generic argument")
+        }
     }
 
     impl Synom for AngleBracketedGenericArguments {
@@ -716,6 +768,10 @@ pub mod parsing {
                 gt_token: gt,
             })
         ));
+
+        fn description() -> Option<&'static str> {
+            Some("angle bracketed generic arguments")
+        }
     }
 
     impl Synom for PathSegment {
@@ -731,6 +787,10 @@ pub mod parsing {
             |
             mod_style_path_segment
         ));
+
+        fn description() -> Option<&'static str> {
+            Some("path segment")
+        }
     }
 
     named!(pub ty_no_eq_after -> Type, terminated!(syn!(Type), not!(punct!(=))));
@@ -770,6 +830,10 @@ pub mod parsing {
                 ty: ty,
             })
         ));
+
+        fn description() -> Option<&'static str> {
+            Some("associated type binding")
+        }
     }
 
     impl Synom for PolyTraitRef {
@@ -793,6 +857,10 @@ pub mod parsing {
                 }
             })
         ));
+
+        fn description() -> Option<&'static str> {
+            Some("poly trait reference")
+        }
     }
 
     impl Synom for BareFnArg {
@@ -809,6 +877,10 @@ pub mod parsing {
                 ty: ty,
             })
         ));
+
+        fn description() -> Option<&'static str> {
+            Some("function type argument")
+        }
     }
 
     impl Synom for BareFnArgName {
@@ -817,6 +889,10 @@ pub mod parsing {
             |
             map!(punct!(_), BareFnArgName::Wild)
         ));
+
+        fn description() -> Option<&'static str> {
+            Some("function argument name")
+        }
     }
 
     impl Synom for Abi {
@@ -829,6 +905,10 @@ pub mod parsing {
                 name: name,
             })
         ));
+
+        fn description() -> Option<&'static str> {
+            Some("ABI qualifier")
+        }
     }
 }
 

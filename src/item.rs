@@ -838,6 +838,10 @@ pub mod parsing {
             |
             syn!(Type) => { FnArg::Ignored }
         ));
+
+        fn description() -> Option<&'static str> {
+            Some("function argument")
+        }
     }
 
     impl_synom!(ItemMod "mod item" do_parse!(
