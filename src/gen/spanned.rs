@@ -19,11 +19,11 @@ struct SpanVisitor {
 }
 
 impl<'a> Visitor<'a> for SpanVisitor {
-    fn visit_span(&mut self, span: &'a ::proc_macro2::Span) {
-        let span = span.into_inner();
-        self.span = self.span.map_or(Some(span), |s| s.join(span));
+    fn visit_span(&mut self, sp: &'a ::proc_macro2::Span) {
+        self.span = self.span.map_or(Some(sp.into_inner()), |s| s.join(sp.into_inner()));
     }
 }
+
 
 impl Spanned for ::Abi {
     fn span(&self) -> Option<::proc_macro::Span> {
@@ -531,10 +531,9 @@ impl Spanned for ::ExprTry {
 # [ cfg ( feature = "full" ) ]
 impl Spanned for ::ExprTuple {
     fn span(&self) -> Option<::proc_macro::Span> {
-        // This way manually editted. It turns out that the visitor doesn't
-        // actually visit `Span`s correctly. For instance, the `Span` in
-        // `self.paren_token` is never visited.
-        Some(self.paren_token.0.into_inner())
+        let mut visitor = SpanVisitor::default();
+        visitor.visit_expr_tuple(self);
+        visitor.span
     }
 }
 
@@ -944,10 +943,28 @@ impl Spanned for ::ItemUse {
 }
 
 
+impl Spanned for ::Lifetime {
+    fn span(&self) -> Option<::proc_macro::Span> {
+        let mut visitor = SpanVisitor::default();
+        visitor.visit_lifetime(self);
+        visitor.span
+    }
+}
+
+
 impl Spanned for ::LifetimeDef {
     fn span(&self) -> Option<::proc_macro::Span> {
         let mut visitor = SpanVisitor::default();
         visitor.visit_lifetime_def(self);
+        visitor.span
+    }
+}
+
+
+impl Spanned for ::Lit {
+    fn span(&self) -> Option<::proc_macro::Span> {
+        let mut visitor = SpanVisitor::default();
+        visitor.visit_lit(self);
         visitor.span
     }
 }
@@ -957,15 +974,6 @@ impl Spanned for ::Local {
     fn span(&self) -> Option<::proc_macro::Span> {
         let mut visitor = SpanVisitor::default();
         visitor.visit_local(self);
-        visitor.span
-    }
-}
-
-# [ cfg ( feature = "full" ) ]
-impl Spanned for ::MacStmtStyle {
-    fn span(&self) -> Option<::proc_macro::Span> {
-        let mut visitor = SpanVisitor::default();
-        visitor.visit_mac_stmt_style(self);
         visitor.span
     }
 }
