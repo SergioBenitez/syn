@@ -730,7 +730,7 @@ mod codegen {
             state.spanned_impls.push_str(&format!(
                 "{features}\n\
                 impl Spanned for ::{ty} {{\n    \
-                    fn span(&self) -> Option<::proc_macro::Span> {{\n        \
+                    fn try_span(&self) -> Option<::proc_macro::Span> {{\n        \
                         let mut visitor = SpanVisitor::default();\n        \
                         visitor.visit_{under_name}(self);\n        \
                         visitor.span\n    \
@@ -738,7 +738,7 @@ mod codegen {
                 }}\n\n",
                 features = s.features,
                 under_name = under_name,
-                ty = s.item.ident,
+                ty = s.ast.ident,
             ));
         }
 
@@ -1138,11 +1138,22 @@ pub trait VisitorMut {{
 use visit::Visitor;
 
 pub trait Spanned {{
+    /// Returns the `proc_macro::Span` of this item if it can be retrieved.
+    ///
+    /// This method is only available when the `unstable` feature is enabled.
+    ///
+    /// # Panics
+    ///
+    /// If the item's `Span` isn't available, this method panics.
+    fn span(&self) -> ::proc_macro::Span {{
+        self.try_span().expect(\"unwrapping unavaiable Span\")
+    }}
+
     /// Returns the `proc_macro::Span` of this item if it can be retrieved. When
     /// using the `Span` for error reporting, it is safe to `unwrap()` it.
     ///
     /// This method is only available when the `unstable` feature is enabled.
-    fn span(&self) -> Option<::proc_macro::Span>;
+    fn try_span(&self) -> Option<::proc_macro::Span>;
 }}
 
 #[derive(Default)]

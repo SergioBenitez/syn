@@ -207,6 +207,13 @@ impl<'a> Cursor<'a> {
         self.ptr == self.scope
     }
 
+    /// Check if the cursor is currently pointing at the end of its valid scope.
+    #[inline]
+    pub fn is_eof(&self) -> bool {
+        // We're at eof if we're at the end of our scope.
+        self.ptr == self.scope
+    }
+
     /// If the cursor is pointing at a Group with the given `Delimiter`, return
     /// a cursor into that group, and one pointing to the next `TokenTree`.
     pub fn group(mut self, delim: Delimiter) -> Option<Group<'a>> {
@@ -304,6 +311,19 @@ impl<'a> Cursor<'a> {
         };
 
         Some((unsafe { self.bump() }, tree))
+    }
+
+    /// Returns the `Span` of the current token if there is one.
+    pub fn current_span(&self) -> Option<Span> {
+        let span = match *self.entry() {
+            Entry::Group(span, ..) => span,
+            Entry::Literal(span, ..) => span,
+            Entry::Term(span, ..) => span,
+            Entry::Op(span, ..) => span,
+            Entry::End(..) => return None
+        };
+
+        Some(span)
     }
 }
 
