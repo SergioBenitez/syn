@@ -67,7 +67,7 @@ fn eval(input: TokenStream) -> Result<TokenStream, Diagnostic> {
     let b = parser.parse::<ExprTuple>()?;
     parser.eof()?;
 
-    let (a_len, b_len) = (a.args.len(), b.args.len());
+    let (a_len, b_len) = (a.elems.len(), b.elems.len());
     if a_len != b_len {
         let diag = b.span()
             .error(format!("expected {} element(s), got {}", a_len, b_len))
